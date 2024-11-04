@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  machine1:
+    image: ubuntu:latest
+    container_name: machine1
+    networks:
+      - my_network
+    command: sleep infinity
+
+  machine2:
+    image: ubuntu:latest
+    container_name: machine2
+    networks:
+      - my_network
+    command: sleep infinity
+
+networks:
+  my_network:
+    driver: bridge
