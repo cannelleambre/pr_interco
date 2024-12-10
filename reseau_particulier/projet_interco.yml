@@ -1,8 +1,8 @@
 services:
   client_a:
     build:
-      context: ./particulier # Utiliser le Dockerfile dans le même répertoire
-    container_name: particulier
+      context: ./client # Utiliser le Dockerfile dans dossier client
+    container_name: client
     cap_add:
       - NET_ADMIN  # Ajoute la capacité pour manipuler le réseau
     networks: 
@@ -11,7 +11,7 @@ services:
 
   router:
     build:
-      context: ./routeur # Utiliser le Dockerfile dans le même répertoire
+      context: ./routeur # Utiliser le Dockerfile dans le dossier routeur
     container_name: router
     networks:
       Reseaux1:
