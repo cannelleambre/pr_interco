@@ -5,7 +5,7 @@ docker-compose -f .\projet_interco.yml up -d (lancer les conteneurs)
 docker exec -it router bash   
 (une fois dans le bash du routeur/box faire)   
 nano etc/default/isc-dhcp-server   
-INTERFACESv4="" --> INTERFACESv4="eth0" (ajouter l'interface eth0 pour indiquer l'interface qui va gérer les requêtes DHCP)  	
+INTERFACESv4="" --> INTERFACESv4="eth0" (ajouter l'interface eth0 pour indiquer l'interface qui va gérer les requêtes DHCP)    	
 service isc-dhcp-server start (lancer les service DHCP)  
 exit (quitter le bash du routeur)  
 
