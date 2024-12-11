@@ -1,5 +1,6 @@
 # pr_interco
 
+## Commande pour le reseau particulier
 docker-compose -f .\projet_interco.yml up -d (lancer les conteneurs)  
 docker exec -it router bash   
 (une fois dans le bash du routeur/box faire)   
