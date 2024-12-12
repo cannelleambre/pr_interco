@@ -14,7 +14,28 @@ services:
     networks:
       - my_network
     command: sleep infinity
+  utilisateur_entreprise:
+    image: alpine:latest
+    container_name: utilisateur_entreprise
+    networks:
+      reseau_prive_ent_prim:
+        ipv4_address: 192.168.0.2
+    command: sleep infinity
+
+  box_ent_prim:
+    image: alpine:latest
+    container_name: box_ent_prim
+    networks:
+      reseau_prive_ent_prim:
+        ipv4_address: 192.168.0.3
+    command: sleep infinity
 
 networks:
   my_network:
     driver: bridge
+ reseau_prive_ent_prim:
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: "192.168.0.0/23"
