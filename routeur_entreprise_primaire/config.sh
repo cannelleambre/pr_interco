@@ -26,3 +26,5 @@ iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
 iptables -A FORWARD -i eth1 -o eth2 -j ACCEPT
 iptables -A FORWARD -i eth2 -o eth1 -j ACCEPT
 
+# Lancer le service DHCP sur toutes les interfaces
+dhcpd -cf /etc/dhcp/dhcpd.conf eth0 eth1 eth2
