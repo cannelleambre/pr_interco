@@ -1,0 +1,13 @@
+$TTL    604800
+@       IN      SOA     dns.entreprise.local. admin.entreprise.local. (
+                        2024010101 ; Serial (modifiez à chaque changement)
+                        604800     ; Refresh
+                        86400      ; Retry
+                        2419200    ; Expire
+                        604800 )   ; Negative Cache TTL
+
+@       IN      NS      dns.entreprise.local.
+dns     IN      A       120.0.82.2
+voip    IN      A       120.0.82.3
+www     IN      A       120.0.82.4
+ftp     IN      A       120.0.82.5
