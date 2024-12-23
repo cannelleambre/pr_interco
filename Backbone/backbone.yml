@@ -1,0 +1,110 @@
+services:
+
+  routeur_entreprise_primaire:
+    image: routeur_frr
+    container_name: routeur_entreprise_primaire
+    networks:
+      backbone_1:
+        ipv4_address: "120.0.85.131"
+    command: ["sh", "/usr/local/bin/script.sh"]
+    volumes:
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_entreprise_primaire/script.sh:/usr/local/bin/script.sh
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_entreprise_primaire/script.sh:/etc/frr/daemons
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+
+  routeur_web_dns_secondaire:
+    image: routeur_frr
+    container_name: routeur_web_dns_secondaire
+    networks:
+      backbone_3:
+        ipv4_address: "120.0.84.131"
+    command: ["sh", "/usr/local/bin/script.sh"]
+    volumes:
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_web_dns_secondaire/script.sh:/usr/local/bin/script.sh
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_web_dns_secondaire/script.sh:/etc/frr/daemons
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+
+  routeur_client:
+    image: routeur_frr
+    container_name: routeur_client
+    networks:
+      backbone_4:
+        ipv4_address: "120.0.84.3"
+    command: "sleep infinity"
+    volumes:
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_client/script.sh:/usr/local/bin/script.sh
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_client/script.sh:/etc/frr/daemons
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+      
+  routeur_interconnexion:
+    image: routeur_frr
+    container_name: routeur_interconnexion
+    networks:
+      backbone_2:
+        ipv4_address: "120.0.85.3"
+    command: "sleep infinity"
+    volumes:
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_interconnexion/script.sh:/usr/local/bin/script.sh
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_interconnexion/script.sh:/etc/frr/daemons
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+      
+  routeur_backbone:
+    image: routeur_frr
+    container_name: routeur_backbone
+    networks:
+      backbone_1:
+        ipv4_address: "120.0.85.130"
+      backbone_2:
+        ipv4_address: "120.0.85.2"
+      backbone_3:
+        ipv4_address: "120.0.84.130"
+      backbone_4:
+        ipv4_address: "120.0.84.2"
+    command: "sleep infinity"
+    volumes:
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_backbone/script.sh:/usr/local/bin/script.sh
+      - /media/mathis/Données/PRODUCTIVITE/ENSEEIHT/S7/Projet_Interconnexion/routeur_backbone/script.sh:/etc/frr/daemons
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+
+
+networks:
+  backbone_1:
+    driver: bridge  # Le driver est essentiel
+    ipam:
+      driver: default
+      config:
+        - subnet: "120.0.85.128/25"
+  backbone_2:
+    driver: bridge  # Le driver est essentiel
+    ipam:
+      driver: default
+      config:
+        - subnet: "120.0.85.0/25"
+  backbone_3:
+    driver: bridge  # Le driver est essentiel
+    ipam:
+      driver: default
+      config:
+        - subnet: "120.0.84.128/25"
+  backbone_4:
+    driver: bridge  # Le driver est essentiel
+    ipam:
+      driver: default
+      config:
+        - subnet: "120.0.84.0/25"
+  
