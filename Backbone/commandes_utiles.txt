@@ -1,23 +1,30 @@
+---------- GESTION DES IMAGES ----------
+Créer une image :
+        docker build -t routeur_frr .
+        
+Supprimer toutes les images existantes :
+        docker rmi $(docker images -q) -f
+        
+        
+
+---------- GESTION DES CONTENEURS ----------
 Lancer les conteneurs :
         docker compose -f backbone.yml up -d
 
 Redémarrer les conteneurs :
         docker stop $(docker ps -q) && docker rm $(docker ps -aq) && docker compose -f backbone.yml up -d
 
-Exécuter un conteneur :
+Exécuter un conteneur (bash - shell classique):
         docker exec -it <conteneur> bash
-
+        
+Exécuter un conteneur (vtysh - configuration d'OSPF et visualisation des voisins / routes configurées):
+        docker exec -it <conteneur> vytsh
+        
+        
+        
+---------- GESTION DES RÉSEAUX ----------
 Afficher la liste des réseaux :
         docker network ls
 
 Supprimer un réseau :
         docker network rm <reseau>
-        
-        
-Créer une image :
-        docker build -t routeur_frr .
-Supprimer toutes les images existantes :
-        docker rmi $(docker images -q) -f
-
-
-
