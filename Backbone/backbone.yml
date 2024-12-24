@@ -6,10 +6,11 @@ services:
     networks:
       backbone_1:
         ipv4_address: "120.0.85.131"
-    command: ["sh", "/usr/local/bin/script.sh"]
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
     volumes:
       - ./routeur_entreprise_primaire/script.sh:/usr/local/bin/script.sh
-      - ./routeur_entreprise_primaire/script.sh:/etc/frr/daemons
+      - ./routeur_entreprise_primaire/daemons:/etc/frr/daemons
     cap_add:
       - NET_ADMIN  # Nécessaire pour activer le routage
     sysctls:
@@ -21,10 +22,11 @@ services:
     networks:
       backbone_3:
         ipv4_address: "120.0.84.131"
-    command: ["sh", "/usr/local/bin/script.sh"]
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
     volumes:
       - ./routeur_web_dns_secondaire/script.sh:/usr/local/bin/script.sh
-      - ./routeur_web_dns_secondaire/script.sh:/etc/frr/daemons
+      - ./routeur_web_dns_secondaire/daemons:/etc/frr/daemons
     cap_add:
       - NET_ADMIN  # Nécessaire pour activer le routage
     sysctls:
@@ -36,10 +38,11 @@ services:
     networks:
       backbone_4:
         ipv4_address: "120.0.84.3"
-    command: "sleep infinity"
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
     volumes:
       - ./routeur_client/script.sh:/usr/local/bin/script.sh
-      - ./routeur_client/script.sh:/etc/frr/daemons
+      - ./routeur_client/daemons:/etc/frr/daemons
     cap_add:
       - NET_ADMIN  # Nécessaire pour activer le routage
     sysctls:
@@ -51,10 +54,11 @@ services:
     networks:
       backbone_2:
         ipv4_address: "120.0.85.3"
-    command: "sleep infinity"
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
     volumes:
       - ./routeur_interconnexion/script.sh:/usr/local/bin/script.sh
-      - ./routeur_interconnexion/script.sh:/etc/frr/daemons
+      - ./routeur_interconnexion/daemons:/etc/frr/daemons
     cap_add:
       - NET_ADMIN  # Nécessaire pour activer le routage
     sysctls:
@@ -72,10 +76,11 @@ services:
         ipv4_address: "120.0.84.130"
       backbone_4:
         ipv4_address: "120.0.84.2"
-    command: "sleep infinity"
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
     volumes:
       - ./routeur_backbone/script.sh:/usr/local/bin/script.sh
-      - ./routeur_backbone/script.sh:/etc/frr/daemons
+      - ./routeur_backbone/daemons:/etc/frr/daemons
     cap_add:
       - NET_ADMIN  # Nécessaire pour activer le routage
     sysctls:
