@@ -1,0 +1,72 @@
+services:
+
+  routeur_entreprise_primaire:
+    image: routeur_frr
+    container_name: routeur_entreprise_primaire
+    networks:
+      - entreprise_primaire_user
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
+    volumes:
+      - ./routeur_entreprise_primaire/script.sh:/usr/local/bin/script.sh
+      - ./routeur_entreprise_primaire/daemons:/etc/frr/daemons
+      - ./routeur_entreprise_primaire/dhcpd.conf:/etc/dhcp/dhcpd.conf
+      - ./routeur_entreprise_primaire/dhcpd.leases:/var/lib/dhcp/dhcpd.leases
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+
+  user_1:
+    image: user
+    container_name: user_1
+    networks:
+      - entreprise_primaire_user
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged : true
+    volumes:
+      - ./user_1/script.sh:/usr/local/bin/script.sh
+    cap_add:
+      - NET_ADMIN
+      
+  user_2:
+    image: user
+    container_name: user_2
+    networks:
+      - entreprise_primaire_user
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged : true
+    volumes:
+      - ./user_2/script.sh:/usr/local/bin/script.sh
+    cap_add:
+      - NET_ADMIN
+
+  user_3:
+    image: user
+    container_name: user_3
+    networks:
+      - entreprise_primaire_user
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged : true
+    volumes:
+      - ./user_3/script.sh:/usr/local/bin/script.sh
+    cap_add:
+      - NET_ADMIN
+
+networks:
+  entreprise_primaire_user:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "120.0.82.0/24"
+  entreprise_primaire_web:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "120.0.83.0/25"
+  entreprise_primaire_dns:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "120.0.83.128/25"
+  
