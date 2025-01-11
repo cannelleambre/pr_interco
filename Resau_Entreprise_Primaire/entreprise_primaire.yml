@@ -1,0 +1,85 @@
+services:
+ utilisateur_entreprise:
+    image: alpine:latest
+    container_name: utilisateur_entreprise
+    networks:
+      reseau_prive_ent_prim:
+        ipv4_address: 192.168.0.2
+    command: sleep infinity
+
+  routeur_prive_ent_prim:
+    image: router_frr
+    container_name: routeur_prive_entreprise_primaire
+    networks:
+      reseau_prive_ent_prim:
+        ipv4_address: 192.168.0.3
+      reseau_primaire3:
+        ipv4_address: 120.0.82.126
+    command: sleep infinity
+
+  routeur_services_ent_prim: 
+    image: router_frr
+    container_name: routeur_services_entreprise_primaire
+    networks:
+      reseau_services_ent_prim:
+        ipv4_address: 120.0.83.137
+      reseau_primaire1 :
+        ipv4_address: 120.0.83.127
+      reseau_primaire2:
+        ipv4_address: 120.0.82.255
+    command: sleep infinity
+
+  DNS_entreprise: 
+    image: ubuntu
+    container_name: DNS_entreprise
+    networks:
+      reseau_services_ent_prim:
+        ipv4_address: 120.0.83.129
+  WEB_entreprise:
+    image: nginx:latest
+    container_name: WEB_entreprise
+    networks:
+     reseau_services_ent_prim:
+        ipv4_address: 120.0.83.250
+  VoIP_entreprise:
+    image: Asterisk:latest
+    container_name: VoIP_entreprise
+    networks:
+     reseau_services_ent_prim:
+        ipv4_address: 120.0.83.130
+  
+  routeur_entreprise_primaire_backbone:
+    image: routeur_frr
+    container_name: routeur_entreprise_primaire_backbone
+    networks:
+      reseau_primaire2:
+        ipv4_address: 120.0.82.254
+      reseau_primaire2:
+        ipv4_address: 120.0.82.127
+networks:
+  
+ reseau_prive_ent_prim:
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: "192.168.0.0/25"
+  reseau_primaire1:
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: "120.0.83.0/25"
+  reseau_primaire2:
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: "120.0.82.128/25"
+  reseau_primaire3:
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: "120.0.82.0/25"
+  

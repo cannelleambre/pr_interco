@@ -1,0 +1,2 @@
+# Spécifier les interfaces réseau sur lesquelles DHCP doit écouter
+INTERFACES="eth0 eth1 eth2"
