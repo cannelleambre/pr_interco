@@ -22,6 +22,19 @@ services:
         ipv4_address: 192.168.0.2
     command: sleep infinity
 
+    VoIP_entreprise:
+    container_name: VoIP_entreprise
+    build:
+      context: ./VoIP_entreprise
+      dockerfile: Dockerfile
+    privileged: true
+    restart: always
+    hostname: VoIP_entreprise
+    networks:
+      VoIP_entreprise:
+        ipv4_address: 120.0.83.130
+  
+
   box_ent_prim:
     image: alpine:latest
     container_name: box_ent_prim
@@ -61,11 +74,16 @@ networks:
       driver: default
       config:
         - subnet: "192.168.1.0/24"
-   my_network:
+  my_network:
     driver: bridge
- reseau_prive_ent_prim:
+  reseau_prive_ent_prim:
     driver: bridge
     ipam:
       driver: default
       config: 
         - subnet: "192.168.0.0/23"
+  voip_entreprise:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 120.0.83.128/25
