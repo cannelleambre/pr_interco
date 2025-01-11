@@ -22,6 +22,11 @@ services:
     networks:
       backbone_3:
         ipv4_address: "120.0.84.131"
+        
+      reseau_dns_web :
+        ipv4_address : "120.0.83.5"   # interface vers serveur  WEB
+        ipv4_address : "120.0.83.4"   #interface vers serveur DNS
+
     command: ["sh","/usr/local/bin/script.sh"]
     privileged: true
     volumes:
@@ -86,6 +91,43 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
 
+    serveur_DNS:
+    build:
+      context: ./DNS # Utiliser le Dockerfile dans le dossier DNS
+    container_name: serveur_DNS
+    networks:
+      reseau_dns_web:
+        ipv4_address: "120.0.83.3"
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
+    volumes:
+      - ./serveur_DNS/script.sh:/usr/local/bin/script.sh
+      - ./serveur_DNS/named.conf:/etc/bind/named.conf
+      - ./serveur_DNS/named.conf.option:/etc/bind/named.conf.option
+      - ./serveur_DNS/zones/monsupersite.db:/etc/bind/zones/monsupersite.db
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+
+    serveur_WEB:
+    build:
+      context: ./WEB # Utiliser le Dockerfile dans le dossier WEB
+    container_name: serveur_WEB
+    networks:
+      reseau_dns_web:
+        ipv4_address: "120.0.83.3"
+    command: ["sh","/usr/local/bin/script.sh"]
+    privileged: true
+    volumes:
+      - ./serveur_WEB/script.sh:/usr/local/bin/script.sh
+      - ./serveur_WEB/index.html:/etc/www/index.html
+      - ./serveur_WEB/style.css:/etc/www/css/style.css
+    cap_add:
+      - NET_ADMIN  # Nécessaire pour activer le routage
+    sysctls:
+      - net.ipv4.ip_forward=1  # Activer le forwarding IP pour permettre le routage
+
 
 networks:
   backbone_1:
@@ -112,4 +154,11 @@ networks:
       driver: default
       config:
         - subnet: "120.0.84.0/25"
+  reseau_dns_web:
+    driver: bridge  # Le driver est essentiel
+    ipam:
+      driver: default
+      config:
+        - subnet: "120.0.83.0/25"
+
   
