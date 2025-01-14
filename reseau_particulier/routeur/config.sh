@@ -1,9 +1,5 @@
 #!/bin/bash
-ip link set dev eth0 up
-ip link set dev eth1 up
 
-ip a a 192.168.1.3/24 dev eth0
-ip a a 120.0.85.3/25 dev eth1
 
 # Activer le forwarding IP
 echo 1 > /proc/sys/net/ipv4/ip_forward
