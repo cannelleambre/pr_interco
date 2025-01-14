@@ -11,8 +11,14 @@ RUN apt-get update && apt-get install -y \
 # Copier la configuration du serveur DHCP dans le conteneur
 COPY ./dhcpd.conf /etc/dhcp/dhcpd.conf
 
+# Copier le script entrypoint.sh dans le conteneur
+COPY ./config.sh /config.sh
+
+# Donner les permissions d'exécution au script entrypoint.sh
+RUN chmod +x /config.sh
+
 # Exposer les ports nécessaires pour le serveur DHCP (67)
 EXPOSE 67/udp
 
-# Entrypoint pour démarrer le service DHCP et autres services nécessaires
-CMD /usr/sbin/isc-dhcp-server -f
+# Utiliser le script entrypoint.sh comme commande d'entrée
+CMD ["/config.sh"]
