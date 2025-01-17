@@ -1,5 +1,5 @@
 services:
- utilisateur_entreprise:
+  utilisateur_entreprise:
     image: alpine:latest
     container_name: utilisateur_entreprise
     networks:
@@ -8,57 +8,86 @@ services:
     command: sleep infinity
 
   routeur_prive_ent_prim:
-    image: router_frr
+    image: router_frr:latest
+    build:
+      context: ./routeur_prive_entreprise_primaire
     container_name: routeur_prive_entreprise_primaire
+    ports:
+    - "80" 
+    privileged: true  # Nécessaire pour manipuler les interfaces réseau et les iptables
     networks:
       reseau_prive_ent_prim:
         ipv4_address: 192.168.0.3
       reseau_primaire3:
         ipv4_address: 120.0.82.126
+    volumes:
+      - ./routeur_prive_entreprise_primaire/frr.conf:/etc/frr/frr.conf
+      - ./routeur_prive_entreprise_primaire/daemons:/etc/frr/daemons
+      - ./routeur_prive_entreprise_primaire/config1.sh:/usr/local/bin/config1.sh
     command: sleep infinity
 
   routeur_services_ent_prim: 
-    image: router_frr
+    image: router_frr:latest
+    build:
+      context: ./routeur_services_entreprise_primaire
     container_name: routeur_services_entreprise_primaire
+    privileged: true 
+    ports:
+    - "80" 
     networks:
       reseau_services_ent_prim:
         ipv4_address: 120.0.83.137
       reseau_primaire1 :
         ipv4_address: 120.0.83.127
       reseau_primaire2:
-        ipv4_address: 120.0.82.255
+        ipv4_address: 120.0.82.253
+    volumes:
+      - ./routeur_services_entreprise_primaire/frr.conf:/etc/frr/frr.conf
+      - ./routeur_services_entreprise_primaire/daemons:/etc/frr/daemons
+      - ./routeur_services_entreprise_primaire/config2.sh:/usr/local/bin/config2.sh
+   
     command: sleep infinity
-
-  DNS_entreprise: 
-    image: ubuntu
-    container_name: DNS_entreprise
-    networks:
-      reseau_services_ent_prim:
-        ipv4_address: 120.0.83.129
   WEB_entreprise:
     image: nginx:latest
     container_name: WEB_entreprise
+    ports:
+      - "80"
     networks:
      reseau_services_ent_prim:
         ipv4_address: 120.0.83.250
-  VoIP_entreprise:
-    image: Asterisk:latest
-    container_name: VoIP_entreprise
+  DNS_entreprise: 
+    image: ubuntu
+    container_name: DNS_entreprise
+    ports:
+    - "80" 
     networks:
-     reseau_services_ent_prim:
-        ipv4_address: 120.0.83.130
+      reseau_services_ent_prim:
+        ipv4_address: 120.0.83.129
+
+ # VoIP_entreprise:
+  #  image: asterisk:latest
+   # container_name: VoIP_entreprise
+    #networks:
+     #reseau_services_ent_prim:
+      #  ipv4_address: 120.0.83.130
   
   routeur_entreprise_primaire_backbone:
-    image: routeur_frr
+    image: routeur_frr:latest
     container_name: routeur_entreprise_primaire_backbone
+    ports:
+    - "80" 
+    privileged: true 
+    build:
+      context: ./routeur_services_entreprise_primaire
     networks:
       reseau_primaire2:
         ipv4_address: 120.0.82.254
-      reseau_primaire2:
+      reseau_primaire3:
         ipv4_address: 120.0.82.127
-networks:
-  
- reseau_prive_ent_prim:
+
+
+networks: 
+  reseau_prive_ent_prim:
     driver: bridge
     ipam:
       driver: default
@@ -82,4 +111,9 @@ networks:
       driver: default
       config: 
         - subnet: "120.0.82.0/25"
-  
+  reseau_services_ent_prim:
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: "120.0.83.128/25"

@@ -9,4 +9,3 @@ ip route add default via 120.0.82.7
 
 # Démarrer le serveur web Apache
 httpd -D FOREGROUND
-

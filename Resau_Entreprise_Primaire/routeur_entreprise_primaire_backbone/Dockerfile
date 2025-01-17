@@ -4,10 +4,10 @@ FROM frrouting/frr:latest
 # Copier les fichiers de configuration
 COPY frr.conf /etc/frr/frr.conf
 COPY daemons /etc/frr/daemons
-COPY config1.sh /usr/local/bin/config1.sh
+COPY config.sh /usr/local/bin/script.sh
 
 # Rendre le script exécutable
-RUN chmod +x /usr/local/bin/config1.sh
+RUN chmod +x /usr/local/bin/script.sh
 
 # Commande par défaut pour démarrer le conteneur
-CMD ["/usr/local/bin/config1.sh"]
+CMD ["/usr/local/bin/script.sh"]

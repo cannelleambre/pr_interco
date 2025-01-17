@@ -1,5 +1,5 @@
 # Utiliser une image Alpine minimaliste pour un serveur léger
-FROM alpine:latest
+FROM ubuntu
 
 # Installer les dépendances nécessaires
 RUN apk add --no-cache bind bind-tools iproute2 bash

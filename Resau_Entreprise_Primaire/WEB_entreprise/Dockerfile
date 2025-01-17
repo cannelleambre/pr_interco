@@ -1,5 +1,5 @@
 # Utiliser une image Alpine légère
-FROM alpine:latest
+FROM nginx:latest
 
 # Installer Apache (serveur web) et outils réseau
 RUN apk add --no-cache apache2 bash iproute2
@@ -13,6 +13,9 @@ COPY index.html /var/www/localhost/htdocs/
 # Copier le script de configuration réseau
 COPY config.sh /home/
 RUN chmod +x /home/config.sh
+
+# Copier le fichier de configuration nginx.conf dans le conteneur
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Exposer le port HTTP
 EXPOSE 80
